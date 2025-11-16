@@ -1,0 +1,137 @@
+// Prisma Schema for People Resource Allocation System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// People/Engineers (Resources)
+model Resource {
+  id          String   @id @default(cuid())
+  name        String
+  email       String?  @unique
+  role        String   // Developer, Team Lead, Tech Lead, Engineering Manager, etc.
+  seniority   String   // Junior, Mid-Level, Senior, Staff, Principal
+  status      String   @default("active") // active, on-leave, inactive
+  podId       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  pod         Pod?                @relation(fields: [podId], references: [id], onDelete: SetNull)
+  skills      ResourceSkill[]
+  allocations ProjectAllocation[]
+
+  @@map("resources")
+}
+
+// Skills/Programming Languages
+model Skill {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  category  String   // Programming Language, Framework, Tool, etc.
+  createdAt DateTime @default(now())
+
+  // Relations
+  resources ResourceSkill[]
+
+  @@map("skills")
+}
+
+// Many-to-many: Resources <-> Skills
+model ResourceSkill {
+  resourceId String
+  skillId    String
+  createdAt  DateTime @default(now())
+
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  skill    Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([resourceId, skillId])
+  @@map("resource_skills")
+}
+
+// Roles
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("roles")
+}
+
+// Pods/Teams
+model Pod {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      String   @default("active") // active, inactive
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  members  Resource[]
+  projects ProjectPod[]
+
+  @@map("pods")
+}
+
+// Projects
+model Project {
+  id               String   @id @default(cuid())
+  name             String
+  description      String?
+  owner            String   // Project Owner/Manager
+  status           String   // active, on-hold, completed
+  startDate        DateTime?
+  endDate          DateTime?
+  budgetManDays    Float?   @default(0) // Budget in Man Days
+  consumedManDays  Float?   @default(0) // Actually consumed Man Days
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  pods        ProjectPod[]
+  allocations ProjectAllocation[]
+
+  @@map("projects")
+}
+
+// Many-to-many: Projects <-> Pods
+model ProjectPod {
+  projectId String
+  podId     String
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  pod     Pod     @relation(fields: [podId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, podId])
+  @@map("project_pods")
+}
+
+// Time-based Project Allocations
+model ProjectAllocation {
+  id           String   @id @default(cuid())
+  resourceId   String
+  projectId    String
+  percentage   Int      // 0-100
+  month        Int      // 1-12
+  year         Int
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  project  Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([resourceId, projectId, month, year])
+  @@index([month, year])
+  @@map("project_allocations")
+}
