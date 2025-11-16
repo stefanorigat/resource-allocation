@@ -838,13 +838,13 @@ export default function MonthlyOverviewPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 sticky top-0 z-20">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-20 border-r border-gray-300 min-w-[250px]">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-20 border-r border-gray-300 min-w-[175px]">
                   Engineer
                 </th>
                 {MONTHS.map((month, idx) => (
                   <th
                     key={idx}
-                    className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]"
+                    className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[70px]"
                   >
                     {month.substring(0, 3)}
                   </th>
@@ -861,7 +861,7 @@ export default function MonthlyOverviewPage() {
                 return (
                   <React.Fragment key={resource.id}>
                     <tr className="hover:bg-gray-50">
-                      <td className="px-4 py-3 whitespace-nowrap sticky left-0 bg-white hover:bg-gray-50 z-10 border-r border-gray-300">
+                      <td className="px-3 py-3 whitespace-nowrap sticky left-0 bg-white hover:bg-gray-50 z-10 border-r border-gray-300">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => toggleRow(resource.id)}
@@ -902,7 +902,7 @@ export default function MonthlyOverviewPage() {
                           return (
                             <td
                               key={month}
-                              className={`px-4 py-3 text-center text-sm font-semibold ${getCellColor(
+                              className={`px-2 py-3 text-center text-sm font-semibold ${getCellColor(
                                 total
                               )} ${getCellBorder(total)}`}
                               title={
@@ -929,7 +929,7 @@ export default function MonthlyOverviewPage() {
                                     key={`${resource.id}-${projectName}`}
                                     className="bg-orange-50 hover:bg-blue-100 group"
                                   >
-                                    <td className="px-4 py-2 whitespace-nowrap sticky left-0 bg-orange-50 hover:bg-blue-100 z-10 border-r border-gray-300 min-w-[250px]">
+                                    <td className="px-3 py-2 whitespace-nowrap sticky left-0 bg-orange-50 hover:bg-blue-100 z-10 border-r border-gray-300 min-w-[175px]">
                                       <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2 pl-10">
                                           <div className="text-sm text-gray-700">
@@ -1027,7 +1027,7 @@ export default function MonthlyOverviewPage() {
                                 {/* Add Project Row */}
                                 {addingProjectForResource === resource.id ? (
                                   <tr className="bg-blue-50 relative z-30">
-                                    <td className="px-4 py-3 sticky left-0 bg-blue-50 z-10 border-r border-gray-300" colSpan={13}>
+                                    <td className="px-3 py-3 sticky left-0 bg-blue-50 z-10 border-r border-gray-300" colSpan={13}>
                                       <div className="pl-10">
                                         <div className="flex items-center gap-3">
                                           <div className="flex-1 max-w-md relative z-50">
@@ -1098,7 +1098,7 @@ export default function MonthlyOverviewPage() {
                                   </tr>
                                 ) : (
                                   <tr className="bg-gray-50 hover:bg-gray-100">
-                                    <td className="px-4 py-2 sticky left-0 bg-gray-50 hover:bg-gray-100 z-10 border-r border-gray-300" colSpan={13}>
+                                    <td className="px-3 py-2 sticky left-0 bg-gray-50 hover:bg-gray-100 z-10 border-r border-gray-300" colSpan={13}>
                                       <button
                                         onClick={() => setAddingProjectForResource(resource.id)}
                                         className="flex items-center gap-2 pl-10 text-sm text-orange-600 hover:text-orange-700 font-medium"
@@ -1284,13 +1284,13 @@ export default function MonthlyOverviewPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 sticky top-0 z-20">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-20 border-r border-gray-300 min-w-[250px]">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-20 border-r border-gray-300 min-w-[175px]">
                   Project
                 </th>
                 {MONTHS.map((month, idx) => (
                   <th
                     key={idx}
-                    className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]"
+                    className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[70px]"
                   >
                     {month.substring(0, 3)}
                   </th>
@@ -1308,7 +1308,7 @@ export default function MonthlyOverviewPage() {
                 return (
                   <React.Fragment key={project.id}>
                     <tr className="hover:bg-gray-50">
-                      <td className="px-4 py-3 whitespace-nowrap sticky left-0 bg-white hover:bg-gray-50 z-10 border-r border-gray-300">
+                      <td className="px-3 py-3 whitespace-nowrap sticky left-0 bg-white hover:bg-gray-50 z-10 border-r border-gray-300">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => toggleRow(project.id)}
@@ -1349,7 +1349,7 @@ export default function MonthlyOverviewPage() {
                           return (
                             <td
                               key={month}
-                              className={`px-4 py-3 text-center text-sm font-semibold ${getCellColor(
+                              className={`px-2 py-3 text-center text-sm font-semibold ${getCellColor(
                                 total
                               )} ${getCellBorder(total)}`}
                               title={
@@ -1376,7 +1376,7 @@ export default function MonthlyOverviewPage() {
                                     key={`${project.id}-${resource.name}`}
                                     className="bg-green-50 hover:bg-green-100 group"
                                   >
-                                    <td className="px-4 py-2 whitespace-nowrap sticky left-0 bg-green-50 hover:bg-green-100 z-10 border-r border-gray-300 min-w-[250px]">
+                                    <td className="px-3 py-2 whitespace-nowrap sticky left-0 bg-green-50 hover:bg-green-100 z-10 border-r border-gray-300 min-w-[175px]">
                                       <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2 pl-10">
                                           <div>
@@ -1475,7 +1475,7 @@ export default function MonthlyOverviewPage() {
                                 {/* Add Resource Row */}
                                 {isAddingResource ? (
                                   <tr className="bg-orange-50">
-                                    <td className="px-4 py-3 sticky left-0 bg-orange-50 z-10 border-r border-gray-300" colSpan={13}>
+                                    <td className="px-3 py-3 sticky left-0 bg-orange-50 z-10 border-r border-gray-300" colSpan={13}>
                                       <div className="pl-10">
                                         <div className="max-w-2xl">
                                           <div className="flex items-start gap-3">
@@ -1553,7 +1553,7 @@ export default function MonthlyOverviewPage() {
                                   </tr>
                                 ) : (
                                   <tr className="bg-gray-50 hover:bg-gray-100">
-                                    <td className="px-4 py-2 sticky left-0 bg-gray-50 hover:bg-gray-100 z-10 border-r border-gray-300" colSpan={13}>
+                                    <td className="px-3 py-2 sticky left-0 bg-gray-50 hover:bg-gray-100 z-10 border-r border-gray-300" colSpan={13}>
                                       <button
                                         onClick={() => setAddingResourceForProject(project.id)}
                                         className="flex items-center gap-2 pl-10 text-sm text-orange-600 hover:text-orange-700 font-medium"
