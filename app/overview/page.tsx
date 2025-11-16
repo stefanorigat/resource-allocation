@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useData } from '@/context/DataContext';
 import { MONTHS } from '@/types';
-import { ChevronDown, ChevronRight, Plus, Trash2, ExternalLink } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Trash2, ExternalLink, X } from 'lucide-react';
 import ProjectModal from '@/components/ProjectModal';
+import Pagination from '@/components/Pagination';
 
 interface AllocationData {
   id: string;
@@ -75,6 +76,11 @@ export default function MonthlyOverviewPage() {
   // Full project edit modal
   const [editingProject, setEditingProject] = useState<any>(null);
   const [showProjectModal, setShowProjectModal] = useState(false);
+
+  // Pagination and search for "By Resource" view
+  const [resourceViewSearchQuery, setResourceViewSearchQuery] = useState('');
+  const [resourceViewCurrentPage, setResourceViewCurrentPage] = useState(1);
+  const [resourceViewPageSize, setResourceViewPageSize] = useState(10);
 
   const years = Array.from({ length: 6 }, (_, i) => 2025 + i);
 
@@ -781,8 +787,51 @@ export default function MonthlyOverviewPage() {
       return Array.from(projectSet).sort();
     };
 
+    // Filter resources based on search query
+    const filteredResources = activeResources.filter((resource) => {
+      if (!resourceViewSearchQuery) return true;
+      const searchLower = resourceViewSearchQuery.toLowerCase();
+      const nameParts = resource.name.toLowerCase().split(' ');
+      return nameParts.some(part => part.includes(searchLower)) || 
+             resource.name.toLowerCase().includes(searchLower);
+    });
+
+    // Apply pagination
+    const totalPages = Math.ceil(filteredResources.length / resourceViewPageSize);
+    const paginatedResources = filteredResources.slice(
+      (resourceViewCurrentPage - 1) * resourceViewPageSize,
+      resourceViewCurrentPage * resourceViewPageSize
+    );
+
     return (
       <>
+        {/* Search bar */}
+        <div className="mb-4 flex gap-4 items-center">
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              placeholder="Search by name or surname..."
+              value={resourceViewSearchQuery}
+              onChange={(e) => {
+                setResourceViewSearchQuery(e.target.value);
+                setResourceViewCurrentPage(1); // Reset to first page on search
+              }}
+              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+            />
+            {resourceViewSearchQuery && (
+              <button
+                onClick={() => {
+                  setResourceViewSearchQuery('');
+                  setResourceViewCurrentPage(1);
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 sticky top-0 z-20">
@@ -801,7 +850,7 @@ export default function MonthlyOverviewPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {activeResources.map((resource) => {
+              {paginatedResources.map((resource) => {
                 const isExpanded = expandedRows.has(resource.id);
                 const resourceProjects = getResourceProjects(resource.id);
                 const hasProjects = resourceProjects.length > 0;
@@ -1070,12 +1119,33 @@ export default function MonthlyOverviewPage() {
             </tbody>
           </table>
 
-          {activeResources.length === 0 && (
+          {paginatedResources.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500">No active resources found</p>
+              <p className="text-gray-500">
+                {resourceViewSearchQuery 
+                  ? `No resources found matching "${resourceViewSearchQuery}"`
+                  : 'No active resources found'}
+              </p>
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {filteredResources.length > 0 && (
+          <div className="mt-4">
+            <Pagination
+              currentPage={resourceViewCurrentPage}
+              totalPages={totalPages}
+              pageSize={resourceViewPageSize}
+              totalItems={filteredResources.length}
+              onPageChange={setResourceViewCurrentPage}
+              onPageSizeChange={(newSize) => {
+                setResourceViewPageSize(newSize);
+                setResourceViewCurrentPage(1);
+              }}
+            />
+          </div>
+        )}
 
         {/* Quick Add Project Modal */}
         {showAddProjectModal && addProjectModalResourceId && (
