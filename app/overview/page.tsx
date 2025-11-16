@@ -1026,11 +1026,11 @@ export default function MonthlyOverviewPage() {
 
                                 {/* Add Project Row */}
                                 {addingProjectForResource === resource.id ? (
-                                  <tr className="bg-blue-50">
+                                  <tr className="bg-blue-50 relative z-30">
                                     <td className="px-4 py-3 sticky left-0 bg-blue-50 z-10 border-r border-gray-300" colSpan={13}>
                                       <div className="pl-10">
                                         <div className="flex items-center gap-3">
-                                          <div className="flex-1 max-w-md relative">
+                                          <div className="flex-1 max-w-md relative z-50">
                                             <label className="block text-xs font-medium text-gray-700 mb-1">
                                               Search Project
                                             </label>
@@ -1042,7 +1042,7 @@ export default function MonthlyOverviewPage() {
                                                 setSelectedProjectToAdd('');
                                               }}
                                               placeholder="Type project name or owner..."
-                                              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 relative z-10"
                                               autoFocus
                                             />
                                             {projectSearchLoading && (
@@ -1052,7 +1052,7 @@ export default function MonthlyOverviewPage() {
                                               <p className="text-xs text-gray-500 mt-1">No projects found</p>
                                             )}
                                             {searchedProjects.length > 0 && (
-                                              <div className="absolute z-50 mt-1 w-full max-h-40 overflow-y-auto border border-gray-200 rounded-md bg-white shadow-lg">
+                                              <div className="absolute z-[100] mt-1 w-full max-h-40 overflow-y-auto border border-gray-200 rounded-md bg-white shadow-lg">
                                                 {searchedProjects.map((project) => (
                                                   <button
                                                     key={project.id}
