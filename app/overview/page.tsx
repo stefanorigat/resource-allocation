@@ -615,13 +615,14 @@ export default function MonthlyOverviewPage() {
 
   // Remove project from resource (delete all allocations for that resource-project combination)
   const handleRemoveProject = async (resourceId: string, projectName: string) => {
-    if (!confirm(`Remove ${projectName} from this resource? This will delete all allocations.`)) {
+    if (!confirm(`Remove ${projectName} from this resource for ${selectedYear}? This will delete allocations for this year only.`)) {
       return;
     }
 
     try {
+      // Only delete allocations for the selected year
       const allocsToDelete = allocations.filter(
-        a => a.resourceId === resourceId && a.projectName === projectName
+        a => a.resourceId === resourceId && a.projectName === projectName && a.year === selectedYear && a.id !== ''
       );
 
       const deletePromises = allocsToDelete.map(alloc =>
@@ -638,13 +639,14 @@ export default function MonthlyOverviewPage() {
 
   // Remove resource from project (delete all allocations for that resource-project combination)
   const handleRemoveResource = async (projectId: string, resourceName: string) => {
-    if (!confirm(`Remove ${resourceName} from this project? This will delete all allocations.`)) {
+    if (!confirm(`Remove ${resourceName} from this project for ${selectedYear}? This will delete allocations for this year only.`)) {
       return;
     }
 
     try {
+      // Only delete allocations for the selected year
       const allocsToDelete = allocations.filter(
-        a => a.projectId === projectId && a.resourceName === resourceName
+        a => a.projectId === projectId && a.resourceName === resourceName && a.year === selectedYear && a.id !== ''
       );
 
       const deletePromises = allocsToDelete.map(alloc =>
