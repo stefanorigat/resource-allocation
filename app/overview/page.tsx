@@ -1030,7 +1030,7 @@ export default function MonthlyOverviewPage() {
                                     <td className="px-4 py-3 sticky left-0 bg-blue-50 z-10 border-r border-gray-300" colSpan={13}>
                                       <div className="pl-10">
                                         <div className="flex items-center gap-3">
-                                          <div className="flex-1">
+                                          <div className="flex-1 max-w-md relative">
                                             <label className="block text-xs font-medium text-gray-700 mb-1">
                                               Search Project
                                             </label>
@@ -1042,7 +1042,7 @@ export default function MonthlyOverviewPage() {
                                                 setSelectedProjectToAdd('');
                                               }}
                                               placeholder="Type project name or owner..."
-                                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                               autoFocus
                                             />
                                             {projectSearchLoading && (
@@ -1052,7 +1052,7 @@ export default function MonthlyOverviewPage() {
                                               <p className="text-xs text-gray-500 mt-1">No projects found</p>
                                             )}
                                             {searchedProjects.length > 0 && (
-                                              <div className="mt-2 max-h-48 overflow-y-auto border border-gray-200 rounded-md">
+                                              <div className="absolute z-50 mt-1 w-full max-h-40 overflow-y-auto border border-gray-200 rounded-md bg-white shadow-lg">
                                                 {searchedProjects.map((project) => (
                                                   <button
                                                     key={project.id}
@@ -1061,11 +1061,11 @@ export default function MonthlyOverviewPage() {
                                                       setProjectSearchQuery(project.name);
                                                       setSearchedProjects([]);
                                                     }}
-                                                    className={`w-full px-3 py-2 text-left text-sm hover:bg-blue-50 border-b border-gray-100 last:border-b-0 transition-colors ${
+                                                    className={`w-full px-3 py-1.5 text-left text-sm hover:bg-blue-50 border-b border-gray-100 last:border-b-0 transition-colors ${
                                                       selectedProjectToAdd === project.id ? 'bg-blue-100' : 'bg-white'
                                                     }`}
                                                   >
-                                                    <div className="font-medium text-gray-900">{project.name}</div>
+                                                    <div className="font-medium text-gray-900 text-xs">{project.name}</div>
                                                     <div className="text-xs text-gray-500">
                                                       {project.owner} • {project.status}
                                                     </div>
@@ -1078,13 +1078,13 @@ export default function MonthlyOverviewPage() {
                                             <button
                                               onClick={() => handleAddProject(resource.id)}
                                               disabled={!selectedProjectToAdd}
-                                              className="px-4 py-2 bg-orange-500 text-white rounded-md text-sm font-medium hover:bg-orange-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed whitespace-nowrap"
+                                              className="px-3 py-1.5 bg-orange-500 text-white rounded-md text-sm font-medium hover:bg-orange-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed whitespace-nowrap"
                                             >
                                               Add
                                             </button>
                                             <button
                                               onClick={handleCancelAddProject}
-                                              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-300 transition-colors whitespace-nowrap"
+                                              className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-300 transition-colors whitespace-nowrap"
                                             >
                                               Cancel
                                             </button>
@@ -1161,7 +1161,7 @@ export default function MonthlyOverviewPage() {
               </div>
 
               <div className="space-y-4">
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Search Project
                   </label>
@@ -1183,7 +1183,7 @@ export default function MonthlyOverviewPage() {
                     <p className="text-xs text-gray-500 mt-1">No projects found</p>
                   )}
                   {searchedProjects.length > 0 && (
-                    <div className="mt-2 max-h-64 overflow-y-auto border border-gray-200 rounded-md">
+                    <div className="mt-2 max-h-40 overflow-y-auto border border-gray-200 rounded-md shadow-sm">
                       {searchedProjects.map((project) => (
                         <button
                           key={project.id}
@@ -1192,11 +1192,11 @@ export default function MonthlyOverviewPage() {
                             setProjectSearchQuery(project.name);
                             setSearchedProjects([]);
                           }}
-                          className={`w-full px-3 py-2 text-left text-sm hover:bg-orange-50 border-b border-gray-100 last:border-b-0 transition-colors ${
+                          className={`w-full px-3 py-1.5 text-left text-sm hover:bg-orange-50 border-b border-gray-100 last:border-b-0 transition-colors ${
                             selectedProjectToAdd === project.id ? 'bg-orange-100' : 'bg-white'
                           }`}
                         >
-                          <div className="font-medium text-gray-900">{project.name}</div>
+                          <div className="font-medium text-gray-900 text-xs">{project.name}</div>
                           <div className="text-xs text-gray-500">
                             {project.owner} • {project.status}
                           </div>
