@@ -78,14 +78,70 @@ export default function MonthlyOverviewPage() {
 
   const years = Array.from({ length: 6 }, (_, i) => 2025 + i);
 
-  // Fetch allocations
+  // Fetch allocations for selected year AND get all unique resource-project combinations
   const fetchAllocations = async () => {
     setLoading(true);
     try {
+      // Fetch allocations for the selected year
       const response = await fetch(`/api/allocations?year=${selectedYear}`);
       if (response.ok) {
-        const data = await response.json();
-        setAllocations(data);
+        const yearData = await response.json();
+        
+        // Also fetch all allocations to find unique combinations
+        const allResponse = await fetch(`/api/allocations`);
+        if (allResponse.ok) {
+          const allData = await allResponse.json();
+          
+          // Find all unique resource-project combinations across all years
+          const uniqueCombinations = new Set<string>();
+          allData.forEach((alloc: AllocationData) => {
+            uniqueCombinations.add(`${alloc.resourceId}-${alloc.projectId}`);
+          });
+          
+          // For each unique combination, ensure we have allocations for all 12 months of selected year
+          const expandedData: AllocationData[] = [];
+          
+          uniqueCombinations.forEach(combo => {
+            const [resourceId, projectId] = combo.split('-');
+            const sampleAlloc = allData.find((a: AllocationData) => 
+              a.resourceId === resourceId && a.projectId === projectId
+            );
+            
+            if (sampleAlloc) {
+              // For each month, add existing allocation or create a placeholder with 0%
+              for (let month = 1; month <= 12; month++) {
+                const existing = yearData.find((a: AllocationData) => 
+                  a.resourceId === resourceId && 
+                  a.projectId === projectId && 
+                  a.month === month
+                );
+                
+                if (existing) {
+                  expandedData.push(existing);
+                } else {
+                  // Create a placeholder with 0% (no id since it doesn't exist in DB yet)
+                  expandedData.push({
+                    id: '', // Empty id indicates it doesn't exist yet
+                    resourceId,
+                    resourceName: sampleAlloc.resourceName,
+                    resourceRole: sampleAlloc.resourceRole,
+                    resourceSeniority: sampleAlloc.resourceSeniority,
+                    projectId,
+                    projectName: sampleAlloc.projectName,
+                    percentage: 0,
+                    month,
+                    year: selectedYear,
+                    notes: null
+                  });
+                }
+              }
+            }
+          });
+          
+          setAllocations(expandedData);
+        } else {
+          setAllocations(yearData);
+        }
       }
     } catch (error) {
       console.error('Error fetching allocations:', error);
@@ -213,8 +269,9 @@ export default function MonthlyOverviewPage() {
         }
         
         // Include ALL cells, even those without allocationIds
+        // Treat empty string as null
         values[key] = { 
-          allocationId: allocationId || null, 
+          allocationId: allocationId && allocationId.trim() !== '' ? allocationId : null, 
           value: percentage.toString(),
           resourceId,
           projectId

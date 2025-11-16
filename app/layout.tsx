@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { DataProvider } from "@/context/DataContext";
-import Navigation from "@/components/Navigation";
+import { Providers } from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Wiz-Team Resource Allocation",
   description: "Event Management resource planning and allocation system",
+  icons: {
+    icon: '/wiz-team-favicon.ico',
+  },
 };
 
 export default function RootLayout({
@@ -29,12 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
       >
-        <DataProvider>
-          <Navigation />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </main>
-        </DataProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

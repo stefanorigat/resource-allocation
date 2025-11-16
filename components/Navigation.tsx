@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-import { Settings, ChevronDown } from 'lucide-react';
+import { Settings, ChevronDown, LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 
 const navItems = [
-  { name: 'Dashboard', path: '/' },
+  { name: 'Dashboard', path: '/dashboard' },
   { name: 'Resources', path: '/resources' },
   { name: 'Pods', path: '/pods' },
   { name: 'Projects', path: '/projects' },
@@ -41,15 +43,20 @@ export default function Navigation() {
   const isSettingsActive = pathname?.startsWith('/settings');
 
   return (
-    <nav className="bg-gradient-to-r from-orange-500 via-orange-400 to-yellow-400 shadow-lg">
+    <nav className="bg-gradient-to-r from-yellow-50 via-orange-400 to-yellow-400 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center gap-3">
-              <Link href="/" className="flex items-center gap-3">
-                <div className="text-2xl font-bold text-white tracking-tight">
-                  WIZ-TEAM
-                </div>
+              <Link href="/dashboard" className="flex items-center gap-3">
+                <Image 
+                  src="/wiz-team-logo.png" 
+                  alt="Wiz-Team Logo" 
+                  width={120} 
+                  height={50}
+                  className="h-10 w-auto"
+                  priority
+                />
               </Link>
               <div className="h-8 w-px bg-white opacity-30 hidden md:block" />
               <h1 className="text-lg font-semibold text-white hidden md:block">
@@ -81,15 +88,15 @@ export default function Navigation() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowSettingsDropdown(!showSettingsDropdown)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`group flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all ${
                   isSettingsActive
-                    ? 'bg-white bg-opacity-20 text-white'
-                    : 'text-white hover:bg-white hover:bg-opacity-10'
+                    ? 'bg-white/20 text-white'
+                    : 'text-white hover:bg-white'
                 }`}
               >
-                <Settings className="w-5 h-5" />
-                <span>Settings</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${showSettingsDropdown ? 'rotate-180' : ''}`} />
+                <Settings className={`w-5 h-5 ${!isSettingsActive && 'group-hover:text-orange-600'}`} />
+                <span className={!isSettingsActive ? 'group-hover:text-orange-600' : ''}>Settings</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${showSettingsDropdown ? 'rotate-180' : ''} ${!isSettingsActive && 'group-hover:text-orange-600'}`} />
               </button>
 
               {/* Dropdown Menu */}
@@ -115,6 +122,16 @@ export default function Navigation() {
                 </div>
               )}
             </div>
+
+            {/* Logout Button */}
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="ml-4 flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:text-orange-600 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="w-5 h-5" />
+              <span>Sign Out</span>
+            </button>
           </div>
         </div>
       </div>
