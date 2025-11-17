@@ -961,7 +961,7 @@ export default function MonthlyOverviewPage() {
                                             className={`px-2 py-2 text-center text-sm border border-gray-200 ${
                                               isInEditMode && allocationId ? 'bg-yellow-50' : 'bg-white'
                                             }`}
-                                            style={{ minWidth: '100px' }}
+                                            style={{ minWidth: '70px' }}
                                           >
                                             {allocationId ? (
                                               isInEditMode ? (
@@ -1413,7 +1413,7 @@ export default function MonthlyOverviewPage() {
                                             className={`px-2 py-2 text-center text-sm border border-gray-200 ${
                                               isInEditMode ? 'bg-yellow-50' : 'bg-white'
                                             }`}
-                                            style={{ minWidth: '100px' }}
+                                            style={{ minWidth: '70px' }}
                                           >
                                             {isInEditMode ? (
                                               <input
