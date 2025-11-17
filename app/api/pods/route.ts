@@ -8,9 +8,13 @@ export async function GET() {
       include: {
         members: {
           include: {
-            skills: {
+            resource: {
               include: {
-                skill: true,
+                skills: {
+                  include: {
+                    skill: true,
+                  },
+                },
               },
             },
           },
@@ -25,9 +29,9 @@ export async function GET() {
     const transformedPods = pods.map((pod) => ({
       ...pod,
       memberCount: pod._count.members,
-      members: pod.members.map((member) => ({
-        ...member,
-        skills: member.skills.map((rs) => rs.skill),
+      members: pod.members.map((rp) => ({
+        ...rp.resource,
+        skills: rp.resource.skills.map((rs) => rs.skill),
       })),
     }));
 
@@ -56,9 +60,13 @@ export async function POST(request: NextRequest) {
       include: {
         members: {
           include: {
-            skills: {
+            resource: {
               include: {
-                skill: true,
+                skills: {
+                  include: {
+                    skill: true,
+                  },
+                },
               },
             },
           },
@@ -72,9 +80,9 @@ export async function POST(request: NextRequest) {
     const transformed = {
       ...pod,
       memberCount: pod._count.members,
-      members: pod.members.map((member) => ({
-        ...member,
-        skills: member.skills.map((rs) => rs.skill),
+      members: pod.members.map((rp) => ({
+        ...rp.resource,
+        skills: rp.resource.skills.map((rs) => rs.skill),
       })),
     };
 

@@ -13,9 +13,13 @@ export async function GET(
       include: {
         members: {
           include: {
-            skills: {
+            resource: {
               include: {
-                skill: true,
+                skills: {
+                  include: {
+                    skill: true,
+                  },
+                },
               },
             },
           },
@@ -33,9 +37,9 @@ export async function GET(
     const transformed = {
       ...pod,
       memberCount: pod._count.members,
-      members: pod.members.map((member) => ({
-        ...member,
-        skills: member.skills.map((rs) => rs.skill),
+      members: pod.members.map((rp) => ({
+        ...rp.resource,
+        skills: rp.resource.skills.map((rs) => rs.skill),
       })),
     };
 
@@ -69,9 +73,13 @@ export async function PATCH(
       include: {
         members: {
           include: {
-            skills: {
+            resource: {
               include: {
-                skill: true,
+                skills: {
+                  include: {
+                    skill: true,
+                  },
+                },
               },
             },
           },
@@ -85,9 +93,9 @@ export async function PATCH(
     const transformed = {
       ...pod,
       memberCount: pod._count.members,
-      members: pod.members.map((member) => ({
-        ...member,
-        skills: member.skills.map((rs) => rs.skill),
+      members: pod.members.map((rp) => ({
+        ...rp.resource,
+        skills: rp.resource.skills.map((rs) => rs.skill),
       })),
     };
 
