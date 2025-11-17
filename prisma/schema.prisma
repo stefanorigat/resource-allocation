@@ -17,12 +17,11 @@ model Resource {
   role        String   // Developer, Team Lead, Tech Lead, Engineering Manager, etc.
   seniority   String   // Junior, Mid-Level, Senior, Staff, Principal
   status      String   @default("active") // active, on-leave, inactive
-  podId       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Relations
-  pod         Pod?                @relation(fields: [podId], references: [id], onDelete: SetNull)
+  pods        ResourcePod[]
   skills      ResourceSkill[]
   allocations ProjectAllocation[]
 
@@ -55,6 +54,19 @@ model ResourceSkill {
   @@map("resource_skills")
 }
 
+// Many-to-many: Resources <-> Pods
+model ResourcePod {
+  resourceId String
+  podId      String
+  createdAt  DateTime @default(now())
+
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  pod      Pod      @relation(fields: [podId], references: [id], onDelete: Cascade)
+
+  @@id([resourceId, podId])
+  @@map("resource_pods")
+}
+
 // Roles
 model Role {
   id          String   @id @default(cuid())
@@ -76,7 +88,7 @@ model Pod {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  members  Resource[]
+  members  ResourcePod[]
   projects ProjectPod[]
 
   @@map("pods")

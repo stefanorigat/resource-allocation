@@ -130,7 +130,9 @@ export default function Dashboard() {
           </h2>
           <div className="space-y-4">
             {pods.map((pod) => {
-              const teamMembers = resources.filter((r) => r.podId === pod.id);
+              const teamMembers = resources.filter((r) => 
+                r.pods.some(p => p.id === pod.id)
+              );
               return (
                 <div key={pod.id}>
                   <div className="flex justify-between items-center mb-1">

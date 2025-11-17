@@ -6,7 +6,8 @@ export interface Resource {
   role: string; // Developer, Team Lead, Tech Lead, Engineering Manager, etc.
   seniority: string; // Junior, Mid-Level, Senior, Staff, Principal
   status: string; // active, on-leave, inactive
-  podId?: string;
+  pods: Pod[]; // Can belong to multiple pods
+  podIds?: string[]; // Helper for forms/API
   skills: Skill[];
   createdAt: Date;
   updatedAt: Date;

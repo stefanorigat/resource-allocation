@@ -29,7 +29,7 @@ export default function ResourceModal({
     role: '',
     seniority: 'Mid-Level',
     status: 'active',
-    podId: '',
+    podIds: [] as string[],
     skills: [] as string[],
   });
 
@@ -68,7 +68,7 @@ export default function ResourceModal({
         role: resource.role,
         seniority: resource.seniority,
         status: resource.status,
-        podId: resource.podId || '',
+        podIds: resource.pods?.map((p) => p.id) || [],
         skills: resource.skills?.map((s) => s.id) || [],
       });
     } else if (roles.length > 0) {
@@ -78,7 +78,7 @@ export default function ResourceModal({
         role: roles[0].name,
         seniority: 'Mid-Level',
         status: 'active',
-        podId: '',
+        podIds: [],
         skills: [],
       });
     }
@@ -90,6 +90,15 @@ export default function ResourceModal({
       skills: prev.skills.includes(skillId)
         ? prev.skills.filter((id) => id !== skillId)
         : [...prev.skills, skillId],
+    }));
+  };
+
+  const handlePodToggle = (podId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      podIds: prev.podIds.includes(podId)
+        ? prev.podIds.filter((id) => id !== podId)
+        : [...prev.podIds, podId],
     }));
   };
 
@@ -218,44 +227,50 @@ export default function ResourceModal({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Pod
-                </label>
-                <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  value={formData.podId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, podId: e.target.value })
-                  }
-                >
-                  <option value="">No team assigned</option>
-                  {availablePods.map((pod) => (
-                    <option key={pod.id} value={pod.id}>
-                      {pod.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status *
+              </label>
+              <select
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                value={formData.status}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+              >
+                {STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Status *
-                </label>
-                <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  value={formData.status}
-                  onChange={(e) =>
-                    setFormData({ ...formData, status: e.target.value })
-                  }
-                >
-                  {STATUS_OPTIONS.map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </select>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Pods (can select multiple)
+              </label>
+              <div className="border border-gray-300 rounded-md p-3 max-h-40 overflow-y-auto bg-gray-50">
+                {availablePods.length === 0 ? (
+                  <p className="text-sm text-gray-500">No pods available</p>
+                ) : (
+                  <div className="space-y-2">
+                    {availablePods.map((pod) => (
+                      <label
+                        key={pod.id}
+                        className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.podIds.includes(pod.id)}
+                          onChange={() => handlePodToggle(pod.id)}
+                          className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                        />
+                        <span className="text-sm text-gray-700">{pod.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

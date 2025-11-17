@@ -6,7 +6,11 @@ export async function GET() {
   try {
     const resources = await prisma.resource.findMany({
       include: {
-        pod: true,
+        pods: {
+          include: {
+            pod: true,
+          },
+        },
         skills: {
           include: {
             skill: true,
@@ -19,6 +23,7 @@ export async function GET() {
     // Transform to match frontend interface
     const transformedResources = resources.map((resource) => ({
       ...resource,
+      pods: resource.pods.map((rp) => rp.pod),
       skills: resource.skills.map((rs) => rs.skill),
     }));
 
@@ -36,7 +41,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, role, seniority, status, podId, skills } = body;
+    const { name, email, role, seniority, status, podIds, skills } = body;
 
     // Validate required fields
     if (!name || !name.trim()) {
@@ -89,7 +94,11 @@ export async function POST(request: NextRequest) {
         role,
         seniority,
         status: status || 'active',
-        podId: podId || null,
+        pods: {
+          create: podIds?.map((podId: string) => ({
+            podId,
+          })) || [],
+        },
         skills: {
           create: skills?.map((skillId: string) => ({
             skillId,
@@ -97,7 +106,11 @@ export async function POST(request: NextRequest) {
         },
       },
       include: {
-        pod: true,
+        pods: {
+          include: {
+            pod: true,
+          },
+        },
         skills: {
           include: {
             skill: true,
@@ -108,6 +121,7 @@ export async function POST(request: NextRequest) {
 
     const transformed = {
       ...resource,
+      pods: resource.pods.map((rp) => rp.pod),
       skills: resource.skills.map((rs) => rs.skill),
     };
 

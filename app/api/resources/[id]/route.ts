@@ -11,7 +11,11 @@ export async function GET(
     const resource = await prisma.resource.findUnique({
       where: { id },
       include: {
-        pod: true,
+        pods: {
+          include: {
+            pod: true,
+          },
+        },
         skills: {
           include: {
             skill: true,
@@ -35,6 +39,7 @@ export async function GET(
 
     const transformed = {
       ...resource,
+      pods: resource.pods.map((rp) => rp.pod),
       skills: resource.skills.map((rs) => rs.skill),
     };
 
@@ -56,7 +61,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, email, role, seniority, status, podId, skills } = body;
+    const { name, email, role, seniority, status, podIds, skills } = body;
 
     // Validate name if provided
     if (name !== undefined && (!name || !name.trim())) {
@@ -117,6 +122,13 @@ export async function PATCH(
       });
     }
 
+    // If pods are being updated, delete existing and create new ones
+    if (podIds !== undefined) {
+      await prisma.resourcePod.deleteMany({
+        where: { resourceId: id },
+      });
+    }
+
     const resource = await prisma.resource.update({
       where: { id },
       data: {
@@ -125,7 +137,13 @@ export async function PATCH(
         ...(role !== undefined && { role }),
         ...(seniority !== undefined && { seniority }),
         ...(status !== undefined && { status }),
-        ...(podId !== undefined && { podId: podId || null }),
+        ...(podIds !== undefined && {
+          pods: {
+            create: podIds.map((podId: string) => ({
+              podId,
+            })),
+          },
+        }),
         ...(skills !== undefined && {
           skills: {
             create: skills.map((skillId: string) => ({
@@ -135,7 +153,11 @@ export async function PATCH(
         }),
       },
       include: {
-        pod: true,
+        pods: {
+          include: {
+            pod: true,
+          },
+        },
         skills: {
           include: {
             skill: true,
@@ -146,6 +168,7 @@ export async function PATCH(
 
     const transformed = {
       ...resource,
+      pods: resource.pods.map((rp) => rp.pod),
       skills: resource.skills.map((rs) => rs.skill),
     };
 

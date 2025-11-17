@@ -88,7 +88,7 @@ export default function ResourcesPage() {
     // Filter by pods (OR logic - show if in any selected pod)
     if (selectedPods.length > 0) {
       filtered = filtered.filter(resource => 
-        selectedPods.includes(resource.podId || '')
+        resource.pods.some(pod => selectedPods.includes(pod.id))
       );
     }
 
@@ -289,7 +289,6 @@ export default function ResourcesPage() {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedResources.map((resource) => {
-              const pod = pods.find((p) => p.id === resource.podId);
               return (
                 <tr key={resource.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -319,9 +318,20 @@ export default function ResourcesPage() {
                       {resource.seniority}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {pod ? pod.name : 'No pod'}
+                  <td className="px-6 py-4">
+                    <div className="flex flex-wrap gap-1">
+                      {resource.pods.length > 0 ? (
+                        resource.pods.map((pod) => (
+                          <span
+                            key={pod.id}
+                            className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
+                          >
+                            {pod.name}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-sm text-gray-500">No pods</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4">
