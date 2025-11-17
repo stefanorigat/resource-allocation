@@ -249,31 +249,31 @@ export default function BudgetPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Project
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Owner
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Budget (MD)
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Allocated (MD)
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Consumed (MD)
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Remaining (MD)
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Progress
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Allocations
                   </th>
                 </tr>
@@ -281,7 +281,7 @@ export default function BudgetPage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredBudgets.map((budget) => (
                   <tr key={budget.projectId} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         {getStatusIcon(budget.status)}
                         <span
@@ -293,7 +293,7 @@ export default function BudgetPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-2">
                         <div className="flex-1">
                           <button
@@ -315,20 +315,20 @@ export default function BudgetPage() {
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">
                       {budget.owner}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">
+                    <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">
                       {budget.budgetManDays}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-blue-600">
+                    <td className="px-4 py-4 whitespace-nowrap text-right text-sm text-blue-600">
                       {budget.allocatedManDays}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
+                    <td className="px-4 py-4 whitespace-nowrap text-right text-sm text-gray-900">
                       {budget.consumedManDays}
                     </td>
                     <td
-                      className={`px-6 py-4 whitespace-nowrap text-right text-sm font-medium ${
+                      className={`px-4 py-4 whitespace-nowrap text-right text-sm font-medium ${
                         budget.remainingManDays < 0
                           ? 'text-red-600'
                           : 'text-green-600'
@@ -336,7 +336,7 @@ export default function BudgetPage() {
                     >
                       {budget.remainingManDays}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-2">
                         <div className="flex-1 bg-gray-200 rounded-full h-2">
                           <div
@@ -353,7 +353,7 @@ export default function BudgetPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                    <td className="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-600">
                       {budget.allocationCount}
                     </td>
                   </tr>
